@@ -11,6 +11,7 @@ namespace RoomPlayground
         static void Main(string[] args)
         {
             Roommaker maker = Roommaker.getInstance();
+            maker.createMap();
         }
     }
 }

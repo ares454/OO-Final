@@ -12,7 +12,7 @@ namespace RoomPlayground
     public class Roommaker
     {
         private Room[] rooms;
-        private Roommaker instance;
+        private static Roommaker instance;
 
         private Roommaker() {}
 
@@ -34,25 +34,45 @@ namespace RoomPlayground
 
             //get the num of rooms and create an array of rooms
             XmlNode root = doc.FirstChild;
-            int numrooms = Int32.Parse(root.InnerXml);
+            int numrooms = root.ChildNodes.Count;
 
             //initialize array with room objects
             rooms = new Room[numrooms];
             for(int i = 0; i < numrooms; i++)
             {
-                rooms[i] = new Room();
+                rooms[i] = new Room(i);
             }
 
             //start connecting rooms
             for(int i = 0; i < numrooms; i++)
             {
                 //move to the next room
-                root = root.NextSibling();
+                root = root.NextSibling;
 
                 //Read and set connections
-                rooms[i].setNorth(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                if(root.ChildNodes[0].InnerText != "null")
+                {
+                    rooms[i].setNorth(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                }
+                if (root.ChildNodes[1].InnerText != "null")
+                {
+                    rooms[i].setSouth(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                }
+                if (root.ChildNodes[2].InnerText != "null")
+                {
+                    rooms[i].setWest(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                }
+                if (root.ChildNodes[3].InnerText != "null")
+                {
+                    rooms[i].setEast(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                }
+
             }
 
+            for(int i = 0; i < numrooms; i++)
+            {
+                rooms[i].print();
+            }
         }
     }
 

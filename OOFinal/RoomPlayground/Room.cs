@@ -9,13 +9,15 @@ namespace RoomPlayground
     public class Room
     {
         //Enemy[] enemies;
+        int roomnum;
         Room North;
         Room South;
         Room West;
         Room East;
 
-        public Room()
+        public Room(int num)
         {
+            roomnum = num;
             North = null;
             South = null;
             West = null;
@@ -40,6 +42,15 @@ namespace RoomPlayground
         public void setEast(Room r)
         {
             East = r;
+        }
+
+        public void print()
+        {
+            Console.WriteLine("Room number: " + this.roomnum);
+            Console.WriteLine("North: " + this.North.roomnum);
+            Console.WriteLine("South: " + this.South.roomnum);
+            Console.WriteLine("West: " + this.West.roomnum);
+            Console.WriteLine("East: " + this.East.roomnum);
         }
     }
 
