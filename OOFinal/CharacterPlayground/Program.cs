@@ -10,6 +10,10 @@ namespace CharacterPlayground
     {
         static void Main(string[] args)
         {
+            Game.GetInstance().Loop();
+
+            Console.Write("Press any key to exit...");
+            Console.ReadKey();
         }
     }
 }
