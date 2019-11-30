@@ -12,12 +12,21 @@ namespace RoomPlayground
     public class Roommaker
     {
         private Room[] rooms;
+        private Roommaker instance;
 
-        public Roommaker()
+        private Roommaker() {}
+
+        public static Roommaker getInstance()
         {
+            if (instance == null)
+            {
+                instance = new Roommaker();
+            }
+
+            return instance;
         }
 
-        public static void createMap()
+        public void createMap()
         {
             //load the file
             XmlDocument doc = new XmlDocument();

@@ -10,7 +10,7 @@ namespace RoomPlayground
     {
         static void Main(string[] args)
         {
-            Roommaker.createMap();
+            Roommaker maker = Roommaker.getInstance();
         }
     }
 }
