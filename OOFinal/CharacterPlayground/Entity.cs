@@ -36,7 +36,7 @@ namespace CharacterPlayground
         {
             int dmg = target.TakeDamage(attack);
             attack.ActivateEffect(this, target);
-            return $"{Name} hits {(target is Enemy ? $"a {target.Name}" : target.Name)} with {attack.Name} for {dmg} damage.";
+            return $"{Name} {attack.DamageText()} {(target is Enemy ? $"a {target.Name}" : target.Name)} for {dmg} damage.";
         }
 
         abstract protected int TakeDamage(Attack attack);

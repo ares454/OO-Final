@@ -8,19 +8,20 @@ namespace CharacterPlayground
 {
     class AttackModifier : Attack
     {
-        public AttackModifier(string name) : base(name) { }
+        protected Attack attack;
         public AttackModifier(Attack a) : base(a) { }
-
-        
     }
 
     class Repeater : AttackModifier
     {
         private int interval;
         public int NumberOfHits { get; private set; }
-        public Repeater(string name, int interval) : base(name) { this.interval = interval; }
 
-        public Repeater(Attack r, int interval) : base(r) { this.interval = interval; }
+        public Repeater(Attack r, int interval) : base(r)
+        {
+            this.interval = interval;
+            attack = r;
+        }
 
         public override void UpdateDamage(Entity c)
         {
@@ -37,9 +38,14 @@ namespace CharacterPlayground
             }
         }
 
+        public override string DamageText()
+        {
+            return attack.DamageText();
+        }
+
         public override string Description()
         {
-            return $"{base.Description()} {NumberOfHits + 1} times";
+            return $"{attack.Description()} {NumberOfHits + 1} times";
         }
     }
 }

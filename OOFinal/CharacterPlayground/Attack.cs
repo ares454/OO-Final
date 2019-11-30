@@ -54,6 +54,10 @@ namespace CharacterPlayground
             Type = AttackType.Spell;
         }
 
+        public override string DamageText()
+        {
+            return base.DamageText();
+        }
     }
 
     public class BasicSpell : Spell
@@ -72,6 +76,10 @@ namespace CharacterPlayground
             Damage = new Range(min, max);
         }
 
+        public override string DamageText()
+        {
+            return "laughs as arcane bolts slam into";
+        }
     }
 
     public class IntermediateSpell: Spell
@@ -89,6 +97,10 @@ namespace CharacterPlayground
             Damage = new Range(min, max);
         }
 
+        public override string DamageText()
+        {
+            return "calls lightning down to strike";
+        }
     }
     public class AdvancedSpell : Spell
     {
@@ -104,6 +116,11 @@ namespace CharacterPlayground
             int min = c.Power + c.Level;
             int max = c.Level + c.Power + c.Knowledge;
             Damage = new Range(min, max);
+        }
+
+        public override string DamageText()
+        {
+            return "screams, sending sharp streams of air into";
         }
     }
 }
