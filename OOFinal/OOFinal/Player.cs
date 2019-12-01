@@ -43,6 +43,35 @@ namespace CharacterPlayground
             }
         }
 
+        public void Recover()
+        {
+            CurrentHealth += (Might + Fortitude) / 2;
+            CurrentMana += Knowledge;
+            CurrentStamina += Fortitude;
+
+            if (CurrentStamina > Stamina)
+                CurrentStamina = Stamina;
+            if (CurrentMana > Mana)
+                CurrentMana = Mana;
+            if (CurrentHealth > Health)
+                CurrentHealth = Health;
+        }
+
+        public override string Attack(Attack attack, Entity target)
+        {
+            if (attack.TypeOfAttack() == typeof(Spell) && attack.Cost > CurrentMana)
+                return "Not enough mana to cast this spell.";
+            else if (attack.TypeOfAttack() == typeof(Weapon) && attack.Cost > CurrentStamina)
+                return "You are too tired to even raise your eyebrow.";
+
+            if (attack.TypeOfAttack() == typeof(Spell))
+                CurrentMana -= attack.Cost;
+            else
+                CurrentStamina -= attack.Cost;
+
+            return base.Attack(attack, target);
+        }
+
         public static Player GetInstance() 
         {
             if (instance == null)
@@ -126,7 +155,7 @@ namespace CharacterPlayground
             string text = "\tLevel 2: Missiles hits a second time when used.\n";
             text += "\tLevel 3:\n";
             text += "\tLevel 4: Missiles hits a third time when used.\n";
-            text += "\tLevel 5: Arcane scream hits a second time\n";
+            text += "\tLevel 5: Arcane scream hits a second time and Lightning Bolt hits all enemies in a room\n";
             text += "\tLevel 6: Missiles hits a fourth time when used. \n";
             text += "\tLevel 7:\n";
             text += "\tLevel 8: Missiles hits a fifth time when used.\n";
@@ -175,7 +204,7 @@ namespace CharacterPlayground
         }
     }
 
-    public class Warrior : Player
+    public partial class Warrior : Player
     {
         public static void New(string name)
         {
@@ -230,6 +259,17 @@ namespace CharacterPlayground
             text += "\tLevel 10: \n";
             text += base.LevelUpGuide();
             return text;
+        }
+
+        public override void LevelUp()
+        {
+            if (Level == 10)
+                return;
+            base.LevelUp();
+
+            basic = new BasicWeapon("Slice and Dice", this);
+            intermediate = new IntermediateWeapon("Great Cleave", this);
+            advanced = new AdvancedWeapon("Limit Break", this);
         }
     }
 
