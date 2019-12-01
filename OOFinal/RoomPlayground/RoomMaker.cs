@@ -43,29 +43,32 @@ namespace RoomPlayground
                 rooms[i] = new Room(i);
             }
 
+            //get the first room
+            XmlNode currNode = root.FirstChild;
             //start connecting rooms
             for(int i = 0; i < numrooms; i++)
             {
-                //move to the next room
-                root = root.NextSibling;
 
-                //Read and set connections
-                if(root.ChildNodes[0].InnerText != "null")
+                //Read and set connections. Have to check that the value isn't null first
+                if(currNode.ChildNodes[1].InnerText != "null")
                 {
-                    rooms[i].setNorth(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                    rooms[i].setNorth(rooms[Int32.Parse(currNode.ChildNodes[1].InnerText)]);
                 }
-                if (root.ChildNodes[1].InnerText != "null")
+                if (currNode.ChildNodes[2].InnerText != "null")
                 {
-                    rooms[i].setSouth(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                    rooms[i].setSouth(rooms[Int32.Parse(currNode.ChildNodes[2].InnerText)]);
                 }
-                if (root.ChildNodes[2].InnerText != "null")
+                if (currNode.ChildNodes[3].InnerText != "null")
                 {
-                    rooms[i].setWest(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                    rooms[i].setWest(rooms[Int32.Parse(currNode.ChildNodes[3].InnerText)]);
                 }
-                if (root.ChildNodes[3].InnerText != "null")
+                if (currNode.ChildNodes[4].InnerText != "null")
                 {
-                    rooms[i].setEast(rooms[Int32.Parse(root.ChildNodes[0].InnerText)]);
+                    rooms[i].setEast(rooms[Int32.Parse(currNode.ChildNodes[4].InnerText)]);
                 }
+
+                //move to the next room
+                currNode = currNode.NextSibling;
 
             }
 

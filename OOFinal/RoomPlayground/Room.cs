@@ -47,10 +47,22 @@ namespace RoomPlayground
         public void print()
         {
             Console.WriteLine("Room number: " + this.roomnum);
-            Console.WriteLine("North: " + this.North.roomnum);
-            Console.WriteLine("South: " + this.South.roomnum);
-            Console.WriteLine("West: " + this.West.roomnum);
-            Console.WriteLine("East: " + this.East.roomnum);
+            if(this.North != null)
+            {
+                Console.WriteLine("North: " + this.North.roomnum);
+            }
+            if (this.South != null)
+            {
+                Console.WriteLine("South: " + this.South.roomnum);
+            }
+            if (this.West != null)
+            {
+                Console.WriteLine("West: " + this.West.roomnum);
+            }
+            if (this.East != null)
+            {
+                Console.WriteLine("East: " + this.East.roomnum);
+            }
         }
     }
 

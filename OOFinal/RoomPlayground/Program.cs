@@ -12,6 +12,8 @@ namespace RoomPlayground
         {
             Roommaker maker = Roommaker.getInstance();
             maker.createMap();
+            Console.Write("Press any key to exit...");
+            Console.ReadKey();
         }
     }
 }
