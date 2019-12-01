@@ -1,47 +1,37 @@
-<!--
-<Room>
-	<Number></Number>
-	<North></North>
-	<South></South>
-	<West></West>
-	<East></East>
-</Room>
--->
-
-<!-- this has the rooms in a cube shape
-1 2 3
-4 5 6
-7 8 9
--->
-
 <dungeoun>
-  <RoomNum>9</RoomNum>
   <Room>
-	  <Number>1</Number>
+	  <Number>0</Number>
 	  <North>null</North>
-	  <South>4</South>
+	  <South>3</South>
 	  <West>null</West>
-	  <East>2</East>
+	  <East>1</East>
   </Room>
+<Room>
+	<Number>1</Number>
+	<North>null</North>
+	<South>4</South>
+	<West>0</West>
+	<East>2</East>
+</Room>
 <Room>
 	<Number>2</Number>
 	<North>null</North>
 	<South>5</South>
 	<West>1</West>
-	<East>3</East>
+	<East>null</East>
 </Room>
 <Room>
 	<Number>3</Number>
-	<North>null</North>
+	<North>0</North>
 	<South>6</South>
-	<West>2</West>
-	<East>null</East>
+	<West>null</West>
+	<East>4</East>
 </Room>
 <Room>
 	<Number>4</Number>
 	<North>1</North>
 	<South>7</South>
-	<West>null</West>
+	<West>3</West>
 	<East>5</East>
 </Room>
 <Room>
@@ -49,20 +39,20 @@
 	<North>2</North>
 	<South>8</South>
 	<West>4</West>
-	<East>6</East>
+	<East>null</East>
 </Room>
 <Room>
 	<Number>6</Number>
 	<North>3</North>
-	<South>9</South>
-	<West>5</West>
-	<East>null</East>
+	<South>null</South>
+	<West>null</West>
+	<East>7</East>
 </Room>
 <Room>
 	<Number>7</Number>
 	<North>4</North>
 	<South>null</South>
-	<West>null</West>
+	<West>6</West>
 	<East>8</East>
 </Room>
 <Room>
@@ -70,13 +60,6 @@
 	<North>5</North>
 	<South>null</South>
 	<West>7</West>
-	<East>9</East>
-</Room>
-<Room>
-	<Number>9</Number>
-	<North>6</North>
-	<South>null</South>
-	<West>8</West>
 	<East>null</East>
 </Room>
 </dungeoun>
