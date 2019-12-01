@@ -89,11 +89,14 @@ namespace CharacterPlayground
             CurrentHealth = Health;
             CurrentMana = Mana;
             CurrentStamina = Stamina;
+            CurrentExperience -= Experience;
             Experience = 0;
             for (int i = 1; i <= Level; ++i)
                 Experience += i;
             Experience *= 100;
         }
+
+        public bool LevelUpAvailable() { return CurrentExperience > Experience; }
 
         virtual public string LevelUpGuide() { return "Gain 10% of total attribute points to distribute"; }
 
@@ -152,15 +155,13 @@ namespace CharacterPlayground
         
         public override string LevelUpGuide()
         {
-            string text = "\tLevel 2: Missiles hits a second time when used.\n";
-            text += "\tLevel 3:\n";
-            text += "\tLevel 4: Missiles hits a third time when used.\n";
-            text += "\tLevel 5: Arcane scream hits a second time and Lightning Bolt hits all enemies in a room\n";
-            text += "\tLevel 6: Missiles hits a fourth time when used. \n";
-            text += "\tLevel 7:\n";
-            text += "\tLevel 8: Missiles hits a fifth time when used.\n";
-            text += "\tLevel 9:\n";
-            text += "\tLevel 10: Missiles hits a sixth time when used. Arcane Scream hits a third time\n";
+            string text = $"\tLevel 2: {basic.Name} hits an extra time\n";
+            text += $"\tLevel 4: {basic.Name} hits an extra time\n";
+            text += $"\tLevel 5: {advanced.Name} hits an extra time and {intermediate.Name} hits all enemies in a room\n";
+            text += $"\tLevel 6: {basic.Name} hits an extra time\n";
+            text += $"\tLevel 8: {basic.Name} hits an extra time\n";
+            text += $"\tLevel 9: {basic.Name}'s damage is greatly increased\n";
+            text += $"\tLevel 10: {basic.Name} hits an extra time and Arcane Scream hits a third time\n";
             text += base.LevelUpGuide();
             return text;
         }
@@ -172,7 +173,7 @@ namespace CharacterPlayground
             base.LevelUp();
 
             basic = new BasicSpell("Missiles", this);
-            intermediate = new IntermediateSpell("Lightning Bolt", this);
+            intermediate = new IntermediateSpell(Level >= 5 ? "Lightning Storm" : "Lightning Bolt", this);
             advanced = new AdvancedSpell("Arcane Scream", this);
 
             if (Level >= 2)
@@ -183,16 +184,23 @@ namespace CharacterPlayground
 
             if(Level >= 5)
             {
+                intermediate = new AreaOfEffect(intermediate);
+                intermediate.UpdateDamage(this);
                 advanced = new Repeater(advanced, 5);
                 advanced.UpdateDamage(this);
             }
 
+            if(Level == 9)
+            {
+                basic = new AmplifyAttack(basic, 3);
+                basic.UpdateDamage(this);
+            }
         }
 
         private Mage(string name)
         {
             Name = name;
-            Level = 5;
+            Level = 0;
             int[] attributes = RollAttributes();
             Power = attributes[0] + 2;
             Knowledge = attributes[1] + 1;
@@ -248,15 +256,14 @@ namespace CharacterPlayground
 
         public override string LevelUpGuide()
         {
-            string text = "\tLevel 2: \n";
-            text += "\tLevel 3:\n";
-            text += "\tLevel 4: \n";
-            text += "\tLevel 5:\n";
-            text += "\tLevel 6: \n";
-            text += "\tLevel 7:\n";
-            text += "\tLevel 8: \n";
-            text += "\tLevel 9:\n";
-            text += "\tLevel 10: \n";
+            string text = "";
+            text += $"\tLevel 3: {basic.Name} hits an extra time\n";
+            text += $"\tLevel 4: {advanced.Name}'s damage is greatly increased\n";
+            text += $"\tLevel 5: {intermediate.Name} hits all enemies in the room\n";
+            text += $"\tLevel 6: {basic.Name} hits an extra time\n";
+            text += $"\tLevel 7: {advanced.Name}'s damage is greatly increased\n";
+            text += $"\tLevel 9: {basic.Name} hits an extra time\n";
+            text += $"\tLevel 10: {advanced.Name}'s damage is greatly increased\n";
             text += base.LevelUpGuide();
             return text;
         }
@@ -269,7 +276,11 @@ namespace CharacterPlayground
 
             basic = new BasicWeapon("Slice and Dice", this);
             intermediate = new IntermediateWeapon("Great Cleave", this);
-            advanced = new AdvancedWeapon("Limit Break", this);
+
+            decimal scale = 1 + (decimal)(.2 * (Level - 1)) + (int)(Level / 3);
+            advanced = new AmplifyAttack(new AdvancedWeapon("Limit Break", this), scale);
+
+
         }
     }
 

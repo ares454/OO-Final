@@ -93,8 +93,13 @@ namespace CharacterPlayground
         private void Info(string[] param)
         {
             if (param.Length == 0)
-                Console.WriteLine("What didn you want to know. Need specifics.");
-            switch(param[0])
+            {
+                Console.WriteLine("What did you want to know? Need specifics.");
+                return;
+            }
+
+
+            switch (param[0])
             {
                 case "level":
                     Console.WriteLine(Player.GetInstance().LevelUpGuide());
@@ -114,9 +119,11 @@ namespace CharacterPlayground
                 switch (param[0])
                 {
                     case "raw":
+                    case "1":
                         Game.GetInstance().ChangeDisplayType("raw");
                         break;
                     case "percent":
+                    case "%":
                         Game.GetInstance().ChangeDisplayType("percent");
                         break;
                     default:
@@ -132,6 +139,9 @@ namespace CharacterPlayground
             Player p = Player.GetInstance();
             if (p.Level == 10)
                 return;
+
+            //if(!p.LevelUpAvailable()) { Console.WriteLine("You aren't ready for that. Go fight some things."); return; }
+
             int attributePoints = p.Might + p.Fortitude + p.Knowledge + p.Power;
             attributePoints /= 10;
             Console.Clear();

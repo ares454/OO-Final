@@ -159,6 +159,7 @@ namespace CharacterPlayground
                 int max = min + c.Might / 3;
                 Damage = new Range(min, max);
             }
+
         }
 
         public class IntermediateWeapon : Weapon
@@ -174,6 +175,11 @@ namespace CharacterPlayground
                 int min = c.Level + c.Might;
                 int max = min + c.Might / 2;
                 Damage = new Range(min, max);
+            }
+
+            public override string DamageText()
+            {
+                return "swings his sword in a great arc, cutting";
             }
         }
 
@@ -218,6 +224,7 @@ namespace CharacterPlayground
             {
                 return "taps into forbidden reserves of strength and swings wildly at";
             }
+
         }
     }
 }

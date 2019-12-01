@@ -61,7 +61,7 @@ namespace CharacterPlayground
 
         public override string Description()
         {
-            return attack.Description() + "and all other enemies in the room";
+            return attack.Description() + " and all other enemies in the room";
         }
 
         public override void ActivateEffect(Entity attacker, Entity defender)
@@ -98,6 +98,7 @@ namespace CharacterPlayground
         public override void UpdateDamage(Entity c)
         {
             Damage = new Range((int)(Damage.Min * scale), (int)(Damage.Max * scale));
+            Cost = (int)(scale * Cost);
         }
 
         public override string Description()
