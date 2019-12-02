@@ -22,7 +22,8 @@ namespace CharacterPlayground
             SetUp();
             func = PercentStats;
             Boss.GetInstance();
-            CurrentRoom = new Room(1);
+            Roommaker maker = Roommaker.getInstance();
+            CurrentRoom = maker.createMap();
         }
         public static Game GetInstance()
         {
@@ -55,6 +56,11 @@ namespace CharacterPlayground
                 Mage.New(name);
             else
                 Warrior.New(name);
+        }
+
+        public void setCurrentRoom(Room room)
+        {
+            CurrentRoom = room;
         }
 
         public void Loop()

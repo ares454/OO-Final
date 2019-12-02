@@ -105,6 +105,46 @@ namespace RoomPlayground
                 Console.WriteLine("East: " + this.East.roomnum);
             }
         }
+
+        public bool hasNorth()
+        {
+            return North != null;
+        }
+
+        public bool hasSouth()
+        {
+            return South != null;
+        }
+
+        public bool hasWest()
+        {
+            return West != null;
+        }
+
+        public bool hasEast()
+        {
+            return East != null;
+        }
+
+        public Room getNorth()
+        {
+            return North;
+        }
+
+        public Room getSouth()
+        {
+            return South;
+        }
+
+        public Room getWest()
+        {
+            return West;
+        }
+
+        public Room getEast()
+        {
+            return East;
+        }
     }
 
 }

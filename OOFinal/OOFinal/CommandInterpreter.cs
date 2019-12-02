@@ -20,10 +20,11 @@ namespace CharacterPlayground
         {
             commandList = new Dictionary<string, Function>();
             commandList.Add("attack", Attack);
-            commandList.Add("north", ChangeRoom);
-            commandList.Add("south", ChangeRoom);
-            commandList.Add("east", ChangeRoom);
-            commandList.Add("west", ChangeRoom);
+            //commandList.Add("north", ChangeRoom);
+            //commandList.Add("south", ChangeRoom);
+            //commandList.Add("east", ChangeRoom);
+            //commandList.Add("west", ChangeRoom);
+            commandList.Add("move", ChangeRoom);
             commandList.Add("info", Info);
             commandList.Add("quit", Exit);
             commandList.Add("exit", Exit);
@@ -105,7 +106,60 @@ namespace CharacterPlayground
 
         private void ChangeRoom(string[] param)
         {
-            //TODO: Implement when room is complete
+            
+
+            Room r = Game.GetInstance().CurrentRoom;
+
+            if (param.Length == 0)
+            {
+                Console.WriteLine("Which direction? Need specifics.");
+                return;
+            }
+
+
+            switch (param[0])
+            {
+                case "north":
+                    if (r.hasNorth())
+                    {
+                        Game.GetInstance().setCurrentRoom(r.getNorth());
+                        Console.WriteLine("You move through the North Door");
+                    }
+                    else
+                        Console.WriteLine("There is no Door to the North");
+                    break;
+                case "south":
+                    if (r.hasSouth())
+                    {
+                        Game.GetInstance().setCurrentRoom(r.getSouth());
+                        Console.WriteLine("You move through the South Door");
+                    }
+                    else
+                        Console.WriteLine("There is no Door to the South");
+                    break;
+                case "west":
+                    if (r.hasWest())
+                    {
+                        Game.GetInstance().setCurrentRoom(r.getWest());
+                        Console.WriteLine("You move through the West Door");
+                    }
+                    else
+                        Console.WriteLine("There is no Door to the West");
+                    break;
+                case "east":
+                    if (r.hasEast())
+                    {
+                        Game.GetInstance().setCurrentRoom(r.getEast());
+                        Console.WriteLine("You move through the East Door");
+                    }
+                    else
+                        Console.WriteLine("There is no Door to the East");
+                    break;
+                default:
+                    Console.WriteLine("No idea what that is.");
+                    break;
+            }
+
         }
 
         private void Info(string[] param)
@@ -254,6 +308,14 @@ namespace CharacterPlayground
 
             foreach (Enemy e in r.EnemyList)
                 Console.WriteLine($"A {e.Name}");
+            if (r.hasNorth())
+                Console.WriteLine("A door to the North");
+            if (r.hasSouth())
+                Console.WriteLine("A door to the South");
+            if (r.hasWest())
+                Console.WriteLine("A door to the West");
+            if (r.hasEast())
+                Console.WriteLine("A door to the East");
         }
 
         private void Fill(string[] param)

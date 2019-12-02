@@ -26,7 +26,7 @@ namespace RoomPlayground
             return instance;
         }
 
-        public void createMap()
+        public Room createMap()
         {
             //load the file
             XmlDocument doc = new XmlDocument();
@@ -72,10 +72,12 @@ namespace RoomPlayground
 
             }
 
-            for(int i = 0; i < numrooms; i++)
-            {
-                rooms[i].print();
-            }
+            //for(int i = 0; i < numrooms; i++)
+            //{
+            //    rooms[i].print();
+            //}
+
+            return rooms[0];
         }
     }
 
