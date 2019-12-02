@@ -28,6 +28,13 @@ namespace CharacterPlayground
             while(commands.Count != 0)
             {
                 Command c = commands[0] as Command;
+                if(c is RiposteCommand && commands.Count > 1)
+                {
+                    commands.Remove(c);
+                    commands.Add(c);
+                    c = commands[0] as Command;
+                }
+                    
                 c.Execute();
                 commands.RemoveAt(0);
             }

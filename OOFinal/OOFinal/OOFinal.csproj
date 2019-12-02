@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Attack.cs" />
     <Compile Include="AttackModifier.cs" />
+    <Compile Include="Boss.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandInterpreter.cs" />
     <Compile Include="CommandPost.cs" />

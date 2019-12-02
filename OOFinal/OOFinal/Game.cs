@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RoomPlayground;
+using OOFinal;
 
 namespace CharacterPlayground
 {
@@ -20,6 +21,8 @@ namespace CharacterPlayground
             active = true;
             SetUp();
             func = PercentStats;
+            Boss.GetInstance();
+            CurrentRoom = new Room(1);
         }
         public static Game GetInstance()
         {

@@ -40,8 +40,6 @@ namespace CharacterPlayground
                 CommandPost.GetInstance().AddCommand(new AttackCommand(attacker, attack, defender));
                 RiposteCommand.GetInstance().ToRiposte(defender);
             }
-
-            attack.ActivateEffect(attacker, defender);
         }
 
         public override string DamageText()
@@ -99,11 +97,6 @@ namespace CharacterPlayground
         {
             Damage = new Range((int)(Damage.Min * scale), (int)(Damage.Max * scale));
             Cost = (int)(scale * Cost);
-        }
-
-        public override string Description()
-        {
-            return attack.Description();
         }
 
         public override string DamageText()

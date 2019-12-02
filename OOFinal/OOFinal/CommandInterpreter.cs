@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using RoomPlayground;
 
 namespace CharacterPlayground
 {
@@ -32,6 +33,8 @@ namespace CharacterPlayground
             commandList.Add("stats", Stats);
             commandList.Add("recover", Rest);
             commandList.Add("rest", Rest);
+            commandList.Add("look", Look);
+            commandList.Add("fill", Fill);
 
             levelCommands = new Dictionary<string, Increase>();
             levelCommands.Add("power", Player.GetInstance().IncreasePower);
@@ -63,26 +66,41 @@ namespace CharacterPlayground
             //TODO: Implement when room is complete
             Attack attack = null;
             Player p = Player.GetInstance();
+            Enemy e = null;
             try
             {
-                switch (param[0])
-                {
-                    case "special":
-                        attack = p.GetAttack("intermediate");
-                        break;
-                    case "ultimate":
-                        attack = p.GetAttack("advanced");
-                        break;
-                    default:
-                        attack = p.GetAttack(null);
-                        break;
-                }
-            }catch(Exception) { Console.WriteLine("Huh? Who are you trying to hit?"); attack = p.GetAttack(null); }
+
+                string[] target = param[0].Split('.');
+                int c = 1;
+
+                if(target.Length > 1)
+                    c= int.Parse(target[0]);
+
+                e = Game.GetInstance().CurrentRoom.GetEnemy(target[target.Length == 1 ? 0 : 1], c);
+
+                if (e == null)
+                    throw new Exception();
+
+                attack = p.GetAttack(null);
+                if (param.Length > 1)
+                    switch (param[1])
+                    {
+                        case "special":
+                            attack = p.GetAttack("intermediate");
+                            break;
+                        case "ultimate":
+                            attack = p.GetAttack("advanced");
+                            break;
+                        default:
+                            break;
+                    }
 
 
-            //TODO: Integrate rooms and enemies
-            CommandPost.GetInstance().AddCommand(new AttackCommand(p, attack, p));
-            CommandPost.GetInstance().AddCommand(RiposteCommand.GetInstance());
+                //TODO: Integrate rooms and enemies
+                CommandPost.GetInstance().AddCommand(new AttackCommand(p, attack, e));
+                CommandPost.GetInstance().AddCommand(RiposteCommand.GetInstance());
+            }
+            catch (Exception) { Console.WriteLine("Huh? Who are you trying to hit?"); return; }
         }
 
         private void ChangeRoom(string[] param)
@@ -140,12 +158,19 @@ namespace CharacterPlayground
             if (p.Level == 10)
                 return;
 
-            //if(!p.LevelUpAvailable()) { Console.WriteLine("You aren't ready for that. Go fight some things."); return; }
+            if(!p.LevelUpAvailable()) { Console.WriteLine("You aren't ready for that. Go fight some things."); return; }
 
             int attributePoints = p.Might + p.Fortitude + p.Knowledge + p.Power;
             attributePoints /= 10;
             Console.Clear();
             Console.WriteLine($"Congratulations on reaching level {p.Level + 1}");
+            if(Player.Roll(100) > 50)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("You had an epiphany while fighting");
+                Console.ResetColor();
+                attributePoints *= 2;
+            }
 
             while(attributePoints != 0)
             {
@@ -220,6 +245,20 @@ namespace CharacterPlayground
         {
             Player.GetInstance().Recover();
             Console.WriteLine("You feel slightly better after a quick rest.");
+        }
+
+        private void Look(string[] param)
+        {
+            Console.WriteLine("In this room, there is:");
+            Room r = Game.GetInstance().CurrentRoom;
+
+            foreach (Enemy e in r.EnemyList)
+                Console.WriteLine($"A {e.Name}");
+        }
+
+        private void Fill(string[] param)
+        {
+            Game.GetInstance().CurrentRoom.FillEnemyList();
         }
     }
 }

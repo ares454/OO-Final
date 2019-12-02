@@ -19,6 +19,42 @@ namespace RoomPlayground
 
         public ArrayList EnemyList { get { return new ArrayList(enemies.ToList<Enemy>()); } }
 
+        /// <summary>
+        /// Testing
+        /// </summary>
+        /// <param name="num"></param>
+        public void FillEnemyList()
+        {
+            Human warrior = new Human(new Fighter(Player.GetInstance().Level));
+            Human mage = new Human(new Wizard(Player.GetInstance().Level));
+            Human archer = new Human(new Archer(Player.GetInstance().Level));
+
+            enemies.Add(warrior);
+            enemies.Add(archer);
+            enemies.Add(mage);
+        }
+
+        public void RemoveDead(Race e)
+        {
+            enemies.Remove(e);
+            if (enemies.Count == 0)
+                FillEnemyList();
+        }
+
+        public Enemy GetEnemy(string name, int count = 1)
+        {
+            if (count < 1)
+                return null;
+
+            foreach(Enemy enemy in enemies)
+            {
+                if (enemy.Name.Contains(name) && --count == 0)
+                    return enemy;
+            }
+
+            return null;
+        }
+
         public Room(int num)
         {
             roomnum = num;
@@ -26,6 +62,7 @@ namespace RoomPlayground
             South = null;
             West = null;
             East = null;
+            enemies = new HashSet<Enemy>();
         }
 
         public void setNorth(Room r)

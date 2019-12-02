@@ -24,11 +24,11 @@ namespace CharacterPlayground
         public Range Damage { get; protected set; }
         public int Cost { get; protected set; }
 
-        public enum AttackType { Physical, Spell}
+        public enum AttackType { Physical, Spell, Untyped}
         public AttackType Type { get; protected set; }
         
         public Attack(string name) { Name = name; }
-        public virtual void ActivateEffect(Entity attacker, Entity defender) { }
+        public virtual void ActivateEffect(Entity attacker, Entity defender) { RiposteCommand.GetInstance().ToRiposte(defender); }
         virtual public void UpdateDamage(Entity c) { }
 
         public Attack(Attack r) : this(r.Name)
@@ -160,6 +160,12 @@ namespace CharacterPlayground
                 Damage = new Range(min, max);
             }
 
+
+            public override string DamageText()
+            {
+                return "slashes at";
+            }
+
         }
 
         public class IntermediateWeapon : Weapon
@@ -187,7 +193,7 @@ namespace CharacterPlayground
         {
             class FeedbackAttack : Weapon
             {
-                public FeedbackAttack(string n, int i) : base(n) { Type = AttackType.Spell; SetDamage(i); }
+                public FeedbackAttack(string n, int i) : base(n) { Type = AttackType.Untyped; SetDamage(i); }
 
                 public override string DamageText()
                 {
@@ -204,20 +210,20 @@ namespace CharacterPlayground
             public AdvancedWeapon(string n, Entity e) : base(n)
             {
                 UpdateDamage(e);
-                Cost = 30;
+                Cost = Damage.Max;
 
             }
 
             public override void UpdateDamage(Entity c)
             {
-                int min = c.Level + c.Might + c.Fortitude;
+                int min = c.Level + c.Might + c.Power;
                 int max = 2 * min;
                 Damage = new Range(min, max);
             }
 
             public override void ActivateEffect(Entity attacker, Entity defender)
             {
-                CommandPost.GetInstance().AddCommand(new AttackCommand(attacker, new FeedbackAttack("", Roll(Damage.Max, Damage.Min)), defender));
+                CommandPost.GetInstance().AddCommand(new AttackCommand(attacker, new FeedbackAttack("", Roll(Damage.Max, Damage.Min)), attacker));
             }
 
             public override string DamageText()
@@ -227,4 +233,75 @@ namespace CharacterPlayground
 
         }
     }
+
+    public partial class Archer : Class
+    {
+        class Arrows : Weapon
+        { 
+            public Arrows(Entity e) : base(e.Name)
+            {
+                UpdateDamage(e);
+            }
+
+            public override string DamageText()
+            {
+                return "fires an arrow at";
+            }
+
+            public override void UpdateDamage(Entity c)
+            {
+                int min = c.Level * 2;
+                int max = min + c.Might / 2;
+                Damage = new Range(min, max);
+            }
+        }
+
+    }
+
+    public partial class Fighter : Class
+    {
+        class Sword : Weapon
+        {
+            public Sword(Entity c) : base(c.Name)
+            {
+                UpdateDamage(c);
+            }
+
+            public override string DamageText()
+            {
+                return "swings a wickedly serrated sword at";
+            }
+
+            public override void UpdateDamage(Entity c)
+            {
+                int min = c.Level * 3/2;
+                int max = min + c.Might/4 + c.Fortitude/4;
+                Damage = new Range(min, max);
+            }
+        }
+    }
+
+    public partial class Wizard : Class
+    {
+        class Wand : Spell
+        {
+            public Wand(Entity c) : base(c.Name)
+            {
+                UpdateDamage(c);
+            }
+
+            public override string DamageText()
+            {
+                return "fires a stream of multicolored sparks at";
+            }
+
+            public override void UpdateDamage(Entity c)
+            {
+                int min = c.Level * 3;
+                int max = min + c.Power/2;
+                Damage = new Range(min, max);
+            }
+        }
+    }
+
 }

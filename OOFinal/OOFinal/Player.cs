@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace CharacterPlayground
 {
@@ -11,17 +12,29 @@ namespace CharacterPlayground
     abstract public class Player : Entity
     {
         static protected Player instance;
-        protected Player() { Experience = 0;}
+        protected Player() 
+        {
+            Experience = 0;
+            levelObserver = new HashSet<Enemy>();
+        }
 
         protected Attack basic;
         protected Attack intermediate;
         protected Attack advanced;
 
-        public int CurrentHealth { get; protected set; }
+        protected HashSet<Enemy> levelObserver;
+        public void AddLevelObserver(Enemy e) { levelObserver.Add(e); }
+        protected void LevelAlert(HashSet<Enemy> collection) 
+        {
+            foreach (Enemy e in collection)
+                e.Alert();
+        }
+
         public int CurrentStamina { get; protected set; }
         public int CurrentMana { get; protected set; }
         public int CurrentExperience { get; protected set; }
-        public int Experience { get; protected set; }
+
+        public void CollectExperience(int xp) { CurrentExperience += xp; }
 
         public void IncreaseFortitude(int num) { Fortitude += num; }
         public void IncreaseMight(int num) { Might += num; }
@@ -62,7 +75,7 @@ namespace CharacterPlayground
             if (attack.TypeOfAttack() == typeof(Spell) && attack.Cost > CurrentMana)
                 return "Not enough mana to cast this spell.";
             else if (attack.TypeOfAttack() == typeof(Weapon) && attack.Cost > CurrentStamina)
-                return "You are too tired to even raise your eyebrow.";
+                return "You are too tired to do that.";
 
             if (attack.TypeOfAttack() == typeof(Spell))
                 CurrentMana -= attack.Cost;
@@ -94,35 +107,13 @@ namespace CharacterPlayground
             for (int i = 1; i <= Level; ++i)
                 Experience += i;
             Experience *= 100;
+            LevelAlert(levelObserver);
         }
 
         public bool LevelUpAvailable() { return CurrentExperience > Experience; }
 
         virtual public string LevelUpGuide() { return "Gain 10% of total attribute points to distribute"; }
 
-        //Returns a list of randomly generated attributes (Note: Ordered)
-        protected int[] RollAttributes()
-        {
-            int[] ret = new int[4];
-            int min = 3;
-            Random r = new Random();
-            for(int i = 0; i < 4; ++i)
-            {
-                int val = Roll(6, min) + Roll(6, min) + Roll(6, min);
-                if(val > 15)
-                {
-                    int bonus = Roll(6, min);
-                    val += bonus;
-                    if (bonus == 6)
-                        val += Roll(6, min);
-                }
-
-                ret[i] = val;
-            }
-            Array.Sort(ret);
-            Array.Reverse(ret);
-            return ret;
-        }
     }
 
     public partial class Mage : Player
@@ -139,12 +130,12 @@ namespace CharacterPlayground
             //Effectively a spell shield
             if (attack.Type == CharacterPlayground.Attack.AttackType.Spell)
             {
-                damage -= (Knowledge / (11 - Level));
+                damage -= (Knowledge / 5) + Level;
                 damage = damage < 0 ? 0 : damage;
             }
-            else
+            else if(attack.Type == CharacterPlayground.Attack.AttackType.Physical)
             {
-                damage -= (Fortitude/ (21 - Level));
+                damage -= (Fortitude/ 10) + Level;
                 damage = damage < 0 ? 0 : damage;
             }
 
@@ -178,6 +169,11 @@ namespace CharacterPlayground
 
             if (Level >= 2)
             {
+                if (Level == 9)
+                {
+                    basic = new AmplifyAttack(basic, 3);
+                    basic.UpdateDamage(this);
+                }
                 basic = new Repeater(basic, 2);
                 basic.UpdateDamage(this);
             }
@@ -190,11 +186,6 @@ namespace CharacterPlayground
                 advanced.UpdateDamage(this);
             }
 
-            if(Level == 9)
-            {
-                basic = new AmplifyAttack(basic, 3);
-                basic.UpdateDamage(this);
-            }
         }
 
         private Mage(string name)
@@ -240,10 +231,10 @@ namespace CharacterPlayground
             //Effectively a spell shield
             if (attack.Type == CharacterPlayground.Attack.AttackType.Spell)
             {
-                damage -= (Knowledge / (21 - Level));
+                damage -= (Knowledge / 10);
                 damage = damage < 0 ? 0 : damage;
             }
-            else
+            else if(attack.Type == CharacterPlayground.Attack.AttackType.Physical)
             {
                 damage -= (Fortitude / (11 - Level));
                 damage = damage < 0 ? 0 : damage;
@@ -277,9 +268,9 @@ namespace CharacterPlayground
             basic = new BasicWeapon("Slice and Dice", this);
             intermediate = new IntermediateWeapon("Great Cleave", this);
 
-            decimal scale = 1 + (decimal)(.2 * (Level - 1)) + (int)(Level / 3);
+            decimal scale = 1 + (decimal)(.2 * (Level - 1));
             advanced = new AmplifyAttack(new AdvancedWeapon("Limit Break", this), scale);
-
+            advanced.UpdateDamage(this);
 
         }
     }
