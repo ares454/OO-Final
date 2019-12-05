@@ -104,7 +104,7 @@ namespace CharacterPlayground
             Experience = 10 * Level;
             Name = "skirmisher";
 
-            Weapon = new Arrows(this);
+            Weapon = new Bow(this);
         }
     }
 

@@ -236,9 +236,9 @@ namespace CharacterPlayground
 
     public partial class Archer : Class
     {
-        class Arrows : Weapon
+        class Bow : Weapon
         { 
-            public Arrows(Entity e) : base(e.Name)
+            public Bow(Entity e) : base(e.Name)
             {
                 UpdateDamage(e);
             }
