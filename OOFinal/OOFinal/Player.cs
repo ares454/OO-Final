@@ -110,7 +110,7 @@ namespace CharacterPlayground
             LevelAlert(levelObserver);
         }
 
-        public bool LevelUpAvailable() { return CurrentExperience > Experience; }
+        public bool LevelUpAvailable() { return CurrentExperience >= Experience; }
 
         virtual public string LevelUpGuide() { return "Gain 10% of total attribute points to distribute"; }
 
@@ -271,6 +271,12 @@ namespace CharacterPlayground
             decimal scale = 1 + (decimal)(.2 * (Level - 1));
             advanced = new AmplifyAttack(new AdvancedWeapon("Limit Break", this), scale);
             advanced.UpdateDamage(this);
+
+            if(Level >= 5)
+            {
+                intermediate = new AreaOfEffect(intermediate);
+                intermediate.UpdateDamage(this);
+            }
 
         }
     }

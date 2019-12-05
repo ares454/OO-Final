@@ -25,13 +25,20 @@ namespace RoomPlayground
         /// <param name="num"></param>
         public void FillEnemyList()
         {
-            Human warrior = new Human(new Fighter(Player.GetInstance().Level));
-            Human mage = new Human(new Wizard(Player.GetInstance().Level));
-            Human archer = new Human(new Archer(Player.GetInstance().Level));
 
-            enemies.Add(warrior);
-            enemies.Add(archer);
-            enemies.Add(mage);
+            int level = Player.GetInstance().Level;
+            int numClass = Class.Type.GetNames(typeof(Class.Type)).Length;
+            int numRace = Race.Type.GetNames(typeof(Race.Type)).Length;
+            Class c;
+
+            for(int i = 0; i < level; ++i)
+            {
+                int val = Player.Roll(numClass* 10) % numClass + 1;
+                int lvl = Player.Roll(level + 2, level - 2 < 1 ? 1 : level - 2);
+                c = Class.CreateEnemy((Class.Type)val, lvl);
+                val = Player.Roll(numRace);
+                enemies.Add(Race.CreateEnemy((Race.Type)val, c));
+            }
         }
 
         public void RemoveDead(Race e)
@@ -63,6 +70,7 @@ namespace RoomPlayground
             West = null;
             East = null;
             enemies = new HashSet<Enemy>();
+            FillEnemyList();
         }
 
         public void setNorth(Room r)

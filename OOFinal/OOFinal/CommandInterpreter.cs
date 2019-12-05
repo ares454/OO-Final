@@ -122,7 +122,7 @@ namespace CharacterPlayground
                 case "north":
                     if (r.hasNorth())
                     {
-                        Game.GetInstance().setCurrentRoom(r.getNorth());
+                        Game.GetInstance().setCurrentRoom(r.North);
                         Console.WriteLine("You move through the North Door");
                     }
                     else
@@ -159,6 +159,8 @@ namespace CharacterPlayground
                     Console.WriteLine("No idea what that is.");
                     break;
             }
+
+            Look(param);
 
         }
 
@@ -212,7 +214,7 @@ namespace CharacterPlayground
             if (p.Level == 10)
                 return;
 
-            if(!p.LevelUpAvailable()) { Console.WriteLine("You aren't ready for that. Go fight some things."); return; }
+           // if(!p.LevelUpAvailable()) { Console.WriteLine("You aren't ready for that. Go fight some things."); return; }
 
             int attributePoints = p.Might + p.Fortitude + p.Knowledge + p.Power;
             attributePoints /= 10;
@@ -308,14 +310,14 @@ namespace CharacterPlayground
 
             foreach (Enemy e in r.EnemyList)
                 Console.WriteLine($"A {e.Name}");
-            if (r.hasNorth())
-                Console.WriteLine("A door to the North");
-            if (r.hasSouth())
-                Console.WriteLine("A door to the South");
-            if (r.hasWest())
-                Console.WriteLine("A door to the West");
-            if (r.hasEast())
-                Console.WriteLine("A door to the East");
+            //if (r.hasNorth())
+            //    Console.WriteLine("A door to the North");
+            //if (r.hasSouth())
+            //    Console.WriteLine("A door to the South");
+            //if (r.hasWest())
+            //    Console.WriteLine("A door to the West");
+            //if (r.hasEast())
+            //    Console.WriteLine("A door to the East");
         }
 
         private void Fill(string[] param)

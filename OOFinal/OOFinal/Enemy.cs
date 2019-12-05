@@ -47,6 +47,18 @@ namespace CharacterPlayground
     public class Race : Enemy
     {
         protected Enemy eClass;
+        public enum Type { Human = 1 };
+        public static Race CreateEnemy(Type t, Class c)
+        {
+            switch(t)
+            {
+                case Type.Human:
+                    return new Human(c);
+            }
+
+            return null;
+        }
+
         public Race(Enemy e) : base(e)
         {
 
@@ -55,6 +67,22 @@ namespace CharacterPlayground
 
     public class Class : Enemy
     {
+        public enum Type { Archer = 1, Fighter = 2, Wizard = 3};
+        public static Class CreateEnemy(Type t, int level)
+        {
+            switch(t)
+            {
+                case Type.Archer:
+                    return new Archer(level);
+                case Type.Fighter:
+                    return new Fighter(level);
+                case Type.Wizard:
+                    return new Wizard(level);
+            }
+
+            return null;
+        }
+
         public Class(int level) : base(level)
         {
 
@@ -68,7 +96,7 @@ namespace CharacterPlayground
         {
             int[] stats = RollAttributes();
             Might = stats[0] + (level * 4);
-            Fortitude = stats[1] + (level * 3);
+            Fortitude = stats[1];
             Knowledge = stats[2] + (level * 2);
             Power = stats[3] + (level);
             DeriveStats();
@@ -82,10 +110,11 @@ namespace CharacterPlayground
 
     public partial class Fighter : Class
     {
+
         public Fighter(int level) : base(level)
         {
             int[] stats = RollAttributes();
-            Fortitude = stats[0] + (level * 4);
+            Fortitude = stats[0] + (level);
             Might = stats[1] + (level * 3);
             Knowledge = stats[2] + (level * 2);
             Power = stats[3] + (level);
@@ -105,7 +134,7 @@ namespace CharacterPlayground
             int[] stats = RollAttributes();
             Power = stats[0] + (level * 4);
             Knowledge = stats[1] + (level * 3);
-            Fortitude = stats[2] + (level * 2);
+            Fortitude = stats[2];
             Might = stats[3] + (level);
             DeriveStats();
             CurrentHealth = Health;

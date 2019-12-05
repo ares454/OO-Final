@@ -21,7 +21,7 @@ namespace CharacterPlayground
             active = true;
             SetUp();
             func = PercentStats;
-            Boss.GetInstance();
+            Boss b = Boss.GetInstance;
             Roommaker maker = Roommaker.getInstance();
             CurrentRoom = maker.createMap();
         }
@@ -63,6 +63,16 @@ namespace CharacterPlayground
             CurrentRoom = room;
         }
 
+        void DisplayExits()
+        {
+            Console.Write("Exits: ");
+            if (CurrentRoom.North != null) Console.Write(" north ");
+            if (CurrentRoom.South != null) Console.Write(" south ");
+            if (CurrentRoom.East != null) Console.Write(" east ");
+            if (CurrentRoom.West != null) Console.Write(" west ");
+            Console.WriteLine();
+        }
+
         public void Loop()
         {
             CommandInterpreter ci = CommandInterpreter.GetInstance();
@@ -70,6 +80,7 @@ namespace CharacterPlayground
 
             while (active)
             {
+                DisplayExits();
                 func();
                 Console.Write(">>");
                 string input = Console.ReadLine().ToLower();

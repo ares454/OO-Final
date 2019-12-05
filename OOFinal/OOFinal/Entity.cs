@@ -40,7 +40,8 @@ namespace CharacterPlayground
             int dmg = target.TakeDamage(attack);
             attack.ActivateEffect(this, target);
             string s = (target is Enemy ? $"a {target.Name}" : target.Name);
-            return $"{Name} {attack.DamageText()} {(target is Player ? "you" : s)} for {dmg} damage.";
+            string r = this is Enemy ? $"A {Name}" : Name;
+            return $"{r} {attack.DamageText()} {(target is Player ? "you" : s)} for {dmg} damage.";
         }
 
         protected int currentHealth;

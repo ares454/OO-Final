@@ -16,12 +16,15 @@ namespace OOFinal
             Name = "Magnus";
         }
 
-        public static Boss GetInstance()
+        public static Boss GetInstance
         {
-            if (b == null)
-                b = new Boss();
+            get
+            {
+                if (b == null)
+                    b = new Boss();
 
-            return b;
+                return b;
+            }
         }
 
         public override void Alert()
